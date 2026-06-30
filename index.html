@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pintu Sehat — Your Personal Medical Concierge</title>
+  <meta name="description" content="Pintu Sehat adalah layanan medical concierge untuk pasien Indonesia yang membutuhkan akses ke perawatan terbaik di luar negeri.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal-dark:#0A6660;--teal:#0B8A82;--teal-mid:#48C9B0;
+      --teal-light:#EAF6F5;--warm-white:#F8F6F3;
+      --text-dark:#1A2B2A;--text-mid:#4B6965;--text-light:#8FA8A5;
+      --white:#FFFFFF;--border:#D4E8E6;--footer-bg:#0B2220;
+      --serif:'DM Serif Display',Georgia,serif;
+      --sans:'Inter',-apple-system,sans-serif;
+      --radius:12px;--max:1080px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--sans);color:var(--text-dark);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased;}
+    button{cursor:pointer;font-family:var(--sans);}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 32px;justify-content:space-between;}
+    .nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;border:none;background:none;}
+    .nav-wordmark{font-size:17px;font-weight:600;color:var(--teal);}
+    .nav-right{display:flex;align-items:center;gap:28px;}
+    .nav-links{display:flex;align-items:center;gap:24px;}
+    .nav-link{font-size:14px;font-weight:500;color:var(--text-mid);border:none;background:none;transition:color .15s;padding:0;}
+    .nav-link:hover,.nav-link.active{color:var(--teal);}
+    .lang-toggle{display:flex;align-items:center;background:var(--teal-light);border-radius:20px;padding:3px;gap:2px;}
+    .lang-btn{font-size:12px;font-weight:600;padding:4px 11px;border-radius:16px;border:none;background:transparent;color:var(--text-light);transition:all .15s;letter-spacing:.03em;}
+    .lang-btn.active{background:var(--teal);color:white;}
+    .hamburger{display:none;flex-direction:column;gap:5px;border:none;background:none;padding:4px;}
+    .hamburger span{display:block;width:22px;height:2px;background:var(--text-dark);border-radius:2px;}
+    .mobile-drawer{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:white;z-index:99;flex-direction:column;padding:28px 24px;gap:4px;}
+    .mobile-drawer.open{display:flex;}
+    .mob-link{font-size:17px;font-weight:500;color:var(--text-dark);padding:16px 0;border:none;border-bottom:1px solid var(--border);background:none;text-align:left;width:100%;}
+    .mob-lang{display:flex;gap:10px;margin-top:24px;}
+    .mob-lang-btn{flex:1;padding:12px;border-radius:8px;border:1.5px solid var(--border);background:none;font-size:14px;font-weight:600;color:var(--text-mid);}
+    .mob-lang-btn.active{border-color:var(--teal);background:var(--teal);color:white;}
+
+    /* PAGE SYSTEM */
+    .page{display:none;padding-top:64px;}
+    .page.visible{display:block;}
+
+    /* HOME HERO */
+    .home-hero{min-height:calc(100vh - 64px);display:grid;grid-template-columns:1fr 1fr;align-items:center;max-width:var(--max);margin:0 auto;padding:48px 32px;gap:48px;}
+    .hero-eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:18px;}
+    .hero-h1{font-family:var(--serif);font-size:50px;line-height:1.1;color:var(--text-dark);margin-bottom:20px;font-weight:400;}
+    .hero-sub{font-size:17px;color:var(--text-mid);line-height:1.7;margin-bottom:32px;max-width:440px;}
+    .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
+    .hero-visual{display:flex;align-items:center;justify-content:center;}
+    .hero-door-wrap{position:relative;width:280px;height:280px;display:flex;align-items:center;justify-content:center;}
+    .hero-door-bg{position:absolute;inset:0;background:var(--teal-light);border-radius:50%;}
+    .hero-door-svg{position:relative;z-index:1;}
+
+    /* BUTTONS */
+    .btn-primary{background:var(--teal);color:white;padding:13px 24px;border-radius:8px;font-size:15px;font-weight:500;border:none;transition:background .15s;}
+    .btn-primary:hover{background:var(--teal-dark);}
+    .btn-outline{background:transparent;color:var(--teal);padding:13px 24px;border-radius:8px;font-size:15px;font-weight:500;border:1.5px solid var(--teal);transition:background .15s;}
+    .btn-outline:hover{background:var(--teal-light);}
+    .btn-white{background:white;color:var(--teal);padding:13px 28px;border-radius:8px;font-size:15px;font-weight:600;border:none;}
+    .btn-white:hover{opacity:.9;}
+
+    /* SECTIONS */
+    .section{max-width:var(--max);margin:0 auto;padding:80px 32px;}
+    .section-eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;}
+    .section-h2{font-family:var(--serif);font-size:36px;font-weight:400;color:var(--text-dark);line-height:1.2;margin-bottom:16px;max-width:560px;}
+    .section-sub{font-size:16px;color:var(--text-mid);line-height:1.7;max-width:540px;margin-bottom:48px;}
+    .bg-warm{background:var(--warm-white);}
+    .bg-light{background:var(--teal-light);}
+
+    /* CARDS */
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+    .card-grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+    .card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:24px;}
+    .card-icon{width:40px;height:40px;background:var(--teal-light);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+    .card-h{font-size:15px;font-weight:600;color:var(--text-dark);margin-bottom:8px;}
+    .card-p{font-size:14px;color:var(--text-mid);line-height:1.65;}
+
+    /* STEPS */
+    .steps{display:flex;flex-direction:column;}
+    .step{display:flex;gap:24px;padding:28px 0;border-bottom:1px solid var(--border);}
+    .step:last-child{border-bottom:none;}
+    .step-num{width:36px;height:36px;flex-shrink:0;background:var(--teal);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;}
+    .step-h{font-size:16px;font-weight:600;color:var(--text-dark);margin-bottom:6px;}
+    .step-p{font-size:14px;color:var(--text-mid);line-height:1.65;}
+
+    /* TEAL BAND */
+    .teal-band{background:var(--teal);padding:72px 32px;text-align:center;}
+    .teal-band-h{font-family:var(--serif);font-size:34px;font-weight:400;color:white;margin-bottom:14px;}
+    .teal-band-p{font-size:16px;color:rgba(255,255,255,.75);margin-bottom:28px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.6;}
+
+    /* PAGE HERO */
+    .page-hero{background:var(--teal-light);padding:64px 32px 56px;text-align:center;}
+    .page-hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;}
+    .page-hero-h{font-family:var(--serif);font-size:40px;font-weight:400;color:var(--text-dark);line-height:1.2;margin-bottom:14px;max-width:640px;margin-left:auto;margin-right:auto;}
+    .page-hero-sub{font-size:16px;color:var(--text-mid);max-width:520px;margin:0 auto;line-height:1.7;}
+
+    /* ABOUT */
+    .about-split{display:grid;grid-template-columns:260px 1fr;gap:56px;align-items:start;max-width:var(--max);margin:0 auto;padding:80px 32px;}
+    .about-photo{width:100%;aspect-ratio:1;background:var(--teal-light);border-radius:20px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--text-light);font-size:13px;}
+
+    /* CONTACT */
+    .contact-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:40px;}
+    .contact-item{background:var(--teal-light);border-radius:var(--radius);padding:20px 22px;}
+    .contact-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:6px;}
+    .contact-value{font-size:15px;font-weight:500;color:var(--text-dark);}
+    .contact-note{font-size:12px;color:var(--text-light);margin-top:4px;}
+
+    /* FOOTER */
+    footer{background:var(--footer-bg);padding:48px 32px;text-align:center;}
+    .footer-wordmark{font-size:19px;font-weight:600;color:var(--teal-mid);margin-bottom:4px;}
+    .footer-tagline{font-size:11px;letter-spacing:.14em;color:rgba(255,255,255,.3);margin-bottom:24px;}
+    .footer-links{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;}
+    .footer-link{font-size:13px;color:rgba(255,255,255,.45);border:none;background:none;transition:color .15s;}
+    .footer-link:hover{color:rgba(255,255,255,.8);}
+    .footer-copy{font-size:12px;color:rgba(255,255,255,.2);}
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+      .home-hero{grid-template-columns:1fr;min-height:auto;padding:40px 20px;}
+      .hero-visual{order:-1;}
+      .hero-door-wrap{width:160px;height:160px;}
+      .hero-h1{font-size:34px;}
+      .nav-links{display:none;}
+      .hamburger{display:flex;}
+      .section{padding:56px 20px;}
+      .section-h2{font-size:28px;}
+      .about-split{grid-template-columns:1fr;padding:48px 20px;}
+      .about-photo{max-width:180px;}
+      .page-hero{padding:48px 20px;}
+      .page-hero-h{font-size:28px;}
+      .teal-band{padding:52px 20px;}
+      .teal-band-h{font-size:26px;}
+    }
+    @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <button class="nav-logo" onclick="goTo('home')">
+    <svg width="26" height="32" viewBox="0 0 44 52" aria-hidden="true">
+      <path d="M2,50 L2,20 C2,4 42,4 42,20 L42,50" fill="none" stroke="#0B8A82" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="0" y1="50" x2="44" y2="50" stroke="#0B8A82" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="22" y1="27" x2="22" y2="44" stroke="#0B8A82" stroke-width="3" stroke-linecap="round"/>
+      <line x1="12" y1="35" x2="32" y2="35" stroke="#0B8A82" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span class="nav-wordmark">Pintu Sehat</span>
+  </button>
+  <div class="nav-right">
+    <div class="nav-links">
+      <button class="nav-link" onclick="goTo('services')" data-page="services" data-id="Layanan" data-en="Services">Layanan</button>
+      <button class="nav-link" onclick="goTo('partners')" data-page="partners" data-id="Untuk Mitra" data-en="For Partners">Untuk Mitra</button>
+      <button class="nav-link" onclick="goTo('about')" data-page="about" data-id="Tentang Kami" data-en="About">Tentang Kami</button>
+      <button class="nav-link" onclick="goTo('contact')" data-page="contact" data-id="Kontak" data-en="Contact">Kontak</button>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="lid" onclick="setLang('id')">ID</button>
+      <button class="lang-btn" id="len" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-drawer" id="mob-drawer">
+  <button class="mob-link" onclick="goTo('services');toggleMenu()" data-id="Layanan" data-en="Services">Layanan</button>
+  <button class="mob-link" onclick="goTo('partners');toggleMenu()" data-id="Untuk Mitra" data-en="For Partners">Untuk Mitra</button>
+  <button class="mob-link" onclick="goTo('about');toggleMenu()" data-id="Tentang Kami" data-en="About">Tentang Kami</button>
+  <button class="mob-link" onclick="goTo('contact');toggleMenu()" data-id="Kontak" data-en="Contact">Kontak</button>
+  <div class="mob-lang">
+    <button class="mob-lang-btn active" id="mlid" onclick="setLang('id')">Indonesia</button>
+    <button class="mob-lang-btn" id="mlen" onclick="setLang('en')">English</button>
+  </div>
+</div>
+
+<!-- ===== HOME ===== -->
+<div class="page visible" id="page-home">
+  <div class="home-hero">
+    <div>
+      <p class="hero-eyebrow" data-id="Your Personal Medical Concierge" data-en="Your Personal Medical Concierge">Your Personal Medical Concierge</p>
+      <h1 class="hero-h1" data-id="Pengobatan terbaik dunia, kami yang urus semuanya" data-en="World-class healthcare, expertly navigated for you">Pengobatan terbaik dunia, kami yang urus semuanya</h1>
+      <p class="hero-sub" data-id="Dari konsultasi pertama hingga pulang sehat — Pintu Sehat hadir di setiap langkah perjalananmu." data-en="From first consultation to a safe return home — Pintu Sehat is with you at every step.">Dari konsultasi pertama hingga pulang sehat — Pintu Sehat hadir di setiap langkah perjalananmu.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="goTo('contact')" data-id="Konsultasi Gratis" data-en="Free Consultation">Konsultasi Gratis</button>
+        <button class="btn-outline" onclick="goTo('partners')" data-id="Untuk Mitra RS" data-en="For Hospital Partners">Untuk Mitra RS</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-door-wrap">
+        <div class="hero-door-bg"></div>
+        <svg class="hero-door-svg" width="150" height="178" viewBox="0 0 44 52" aria-hidden="true">
+          <path d="M2,50 L2,20 C2,4 42,4 42,20 L42,50" fill="none" stroke="#0B8A82" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="0" y1="50" x2="44" y2="50" stroke="#0B8A82" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="22" y1="27" x2="22" y2="44" stroke="#0B8A82" stroke-width="2" stroke-linecap="round"/>
+          <line x1="12" y1="35" x2="32" y2="35" stroke="#0B8A82" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-warm">
+    <div class="section">
+      <p class="section-eyebrow" data-id="Layanan kami" data-en="What we do">Layanan kami</p>
+      <h2 class="section-h2" data-id="Satu pintu untuk semua kebutuhan medismu" data-en="One door for all your medical needs">Satu pintu untuk semua kebutuhan medismu</h2>
+      <p class="section-sub" data-id="Kami menangani seluruh perjalanan medismu supaya kamu bisa fokus pada satu hal: sembuh." data-en="We manage every step of your medical journey so you can focus on one thing: healing.">Kami menangani seluruh perjalanan medismu supaya kamu bisa fokus pada satu hal: sembuh.</p>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0B8A82" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <p class="card-h" data-id="Navigasi pasien" data-en="Patient navigation">Navigasi pasien</p>
+          <p class="card-p" data-id="Identifikasi spesialis dan rumah sakit yang paling sesuai dengan kondisi medismu." data-en="Identifying the right specialists and hospitals for your specific condition.">Identifikasi spesialis dan rumah sakit yang paling sesuai dengan kondisi medismu.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0B8A82" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <p class="card-h" data-id="Koordinasi perjalanan" data-en="Travel coordination">Koordinasi perjalanan</p>
+          <p class="card-p" data-id="Visa, tiket, akomodasi, dan semua logistik perjalanan medis dari A sampai Z." data-en="Visa, flights, accommodation, and all medical travel logistics from A to Z.">Visa, tiket, akomodasi, dan semua logistik perjalanan medis dari A sampai Z.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0B8A82" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <p class="card-h" data-id="Pendampingan langsung" data-en="On-site accompaniment">Pendampingan langsung</p>
+          <p class="card-p" data-id="Hadir bersamamu di lokasi — interpretasi, komunikasi dokter, dan support penuh." data-en="Present with you on-site — interpretation, doctor communication, and full support.">Hadir bersamamu di lokasi — interpretasi, komunikasi dokter, dan support penuh.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0B8A82" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <p class="card-h" data-id="Second opinion" data-en="Second opinion">Second opinion</p>
+          <p class="card-p" data-id="Akses ke spesialis internasional untuk konfirmasi diagnosis dan opsi pengobatan." data-en="Access to international specialists to confirm diagnoses and explore treatment options.">Akses ke spesialis internasional untuk konfirmasi diagnosis dan opsi pengobatan.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-eyebrow" data-id="Mengapa Pintu Sehat" data-en="Why Pintu Sehat">Mengapa Pintu Sehat</p>
+    <h2 class="section-h2" data-id="Independen, personal, dan sepenuhnya berpihak pada kamu" data-en="Independent, personal, and entirely on your side">Independen, personal, dan sepenuhnya berpihak pada kamu</h2>
+    <div class="card-grid-2">
+      <div class="card">
+        <p class="card-h" data-id="Tidak terikat satu rumah sakit" data-en="Not tied to any single hospital">Tidak terikat satu rumah sakit</p>
+        <p class="card-p" data-id="Rekomendasi kami murni berdasarkan kebutuhan medismu, bukan kepentingan komersial." data-en="Our recommendations are based purely on your medical needs, not commercial interests.">Rekomendasi kami murni berdasarkan kebutuhan medismu, bukan kepentingan komersial.</p>
+      </div>
+      <div class="card">
+        <p class="card-h" data-id="Satu kontak, semua urusan" data-en="One contact, everything handled">Satu kontak, semua urusan</p>
+        <p class="card-p" data-id="Tidak perlu koordinasi dengan banyak pihak. Satu titik kontak mengurus semuanya." data-en="No need to coordinate with multiple parties. One contact handles everything.">Tidak perlu koordinasi dengan banyak pihak. Satu titik kontak mengurus semuanya.</p>
+      </div>
+      <div class="card">
+        <p class="card-h" data-id="Akses ke perawatan terbaik" data-en="Access to the best care">Akses ke perawatan terbaik</p>
+        <p class="card-p" data-id="Kami bantu kamu mengakses fasilitas dan spesialis yang belum tersedia di Indonesia." data-en="We help you access facilities and specialists not yet available in Indonesia.">Kami bantu kamu mengakses fasilitas dan spesialis yang belum tersedia di Indonesia.</p>
+      </div>
+      <div class="card">
+        <p class="card-h" data-id="Pendekatan holistik" data-en="Holistic approach">Pendekatan holistik</p>
+        <p class="card-p" data-id="Termasuk akses ke fasilitas yang menggabungkan kedokteran modern dengan pendekatan tradisional." data-en="Including access to facilities combining modern and traditional healing approaches.">Termasuk akses ke fasilitas yang menggabungkan kedokteran modern dengan pendekatan tradisional.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="teal-band">
+    <h2 class="teal-band-h" data-id="Siap memulai perjalananmu?" data-en="Ready to begin your journey?">Siap memulai perjalananmu?</h2>
+    <p class="teal-band-p" data-id="Ceritakan kondisimu. Konsultasi pertama gratis dan tanpa kewajiban." data-en="Tell us your situation. First consultation is free with no obligation.">Ceritakan kondisimu. Konsultasi pertama gratis dan tanpa kewajiban.</p>
+    <button class="btn-white" onclick="goTo('contact')" data-id="Hubungi Kami" data-en="Contact Us">Hubungi Kami</button>
+  </div>
+
+  <footer>
+    <p class="footer-wordmark">Pintu Sehat</p>
+    <p class="footer-tagline">ONE DOOR. EVERY CARE.</p>
+    <div class="footer-links">
+      <button class="footer-link" onclick="goTo('services')" data-id="Layanan" data-en="Services">Layanan</button>
+      <button class="footer-link" onclick="goTo('partners')" data-id="Untuk Mitra" data-en="For Partners">Untuk Mitra</button>
+      <button class="footer-link" onclick="goTo('about')" data-id="Tentang Kami" data-en="About">Tentang Kami</button>
+      <button class="footer-link" onclick="goTo('contact')" data-id="Kontak" data-en="Contact">Kontak</button>
+    </div>
+    <p class="footer-copy">© 2026 Pintu Sehat · Your Personal Medical Concierge</p>
+  </footer>
+</div>
+
+<!-- ===== SERVICES ===== -->
+<div class="page" id="page-services">
+  <div class="page-hero">
+    <p class="page-hero-eyebrow" data-id="Layanan" data-en="Services">Layanan</p>
+    <h1 class="page-hero-h" data-id="Apa yang kami lakukan untuk kamu" data-en="What we do for you">Apa yang kami lakukan untuk kamu</h1>
+    <p class="page-hero-sub" data-id="Setiap perjalanan medis berbeda. Kami menyesuaikan setiap langkah dengan kebutuhan spesifik kamu dan keluargamu." data-en="Every medical journey is different. We tailor every step to your specific needs and those of your family.">Setiap perjalanan medis berbeda. Kami menyesuaikan setiap langkah dengan kebutuhan spesifik kamu dan keluargamu.</p>
+  </div>
+  <div class="section">
+    <p class="section-eyebrow" data-id="Perjalanan pasien" data-en="Patient journey">Perjalanan pasien</p>
+    <h2 class="section-h2" data-id="Dari hari pertama hingga pulang ke rumah" data-en="From day one to arriving back home">Dari hari pertama hingga pulang ke rumah</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div><p class="step-h" data-id="Konsultasi awal" data-en="Initial consultation">Konsultasi awal</p><p class="step-p" data-id="Kami dengarkan kondisi medismu, riwayat pengobatan, dan tujuan perawatan yang kamu inginkan. Gratis, tanpa kewajiban." data-en="We listen to your medical condition, treatment history, and the care outcomes you're looking for. Free, no obligation.">Kami dengarkan kondisi medismu, riwayat pengobatan, dan tujuan perawatan yang kamu inginkan. Gratis, tanpa kewajiban.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div><p class="step-h" data-id="Pemilihan fasilitas & spesialis" data-en="Facility & specialist selection">Pemilihan fasilitas & spesialis</p><p class="step-p" data-id="Kami identifikasi rumah sakit dan dokter spesialis yang paling sesuai — bukan berdasarkan komisi, tapi berdasarkan kualitas." data-en="We identify the right hospital and specialist — based on quality, not commissions.">Kami identifikasi rumah sakit dan dokter spesialis yang paling sesuai — bukan berdasarkan komisi, tapi berdasarkan kualitas.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div><p class="step-h" data-id="Persiapan & koordinasi" data-en="Preparation & coordination">Persiapan & koordinasi</p><p class="step-p" data-id="Pengurusan visa, pemesanan tiket dan akomodasi, transfer rekam medis, dan semua persiapan sebelum berangkat." data-en="Visa processing, flights and accommodation booking, medical record transfer, and all pre-departure preparation.">Pengurusan visa, pemesanan tiket dan akomodasi, transfer rekam medis, dan semua persiapan sebelum berangkat.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div><p class="step-h" data-id="Pendampingan di lokasi" data-en="On-site accompaniment">Pendampingan di lokasi</p><p class="step-p" data-id="Kami hadir langsung bersamamu — interpretasi konsultasi dokter, komunikasi dengan tim medis, dan support penuh selama perawatan." data-en="We are there with you — interpreting consultations, communicating with the medical team, and providing full support.">Kami hadir langsung bersamamu — interpretasi konsultasi dokter, komunikasi dengan tim medis, dan support penuh selama perawatan.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div><p class="step-h" data-id="Follow-up setelah pulang" data-en="Post-treatment follow-up">Follow-up setelah pulang</p><p class="step-p" data-id="Kami tetap mendampingi setelah kamu kembali — koordinasi tindak lanjut medis dan komunikasi berkelanjutan dengan dokter." data-en="We stay with you after your return — coordinating medical follow-up and maintaining communication with your doctors.">Kami tetap mendampingi setelah kamu kembali — koordinasi tindak lanjut medis dan komunikasi berkelanjutan dengan dokter.</p></div></div>
+    </div>
+  </div>
+  <div class="teal-band">
+    <h2 class="teal-band-h" data-id="Mulai dengan konsultasi gratis" data-en="Start with a free consultation">Mulai dengan konsultasi gratis</h2>
+    <p class="teal-band-p" data-id="Tidak ada kewajiban. Ceritakan kondisimu dan kami bantu tentukan langkah terbaik." data-en="No obligation. Tell us your situation and we will help determine the best next step.">Tidak ada kewajiban. Ceritakan kondisimu dan kami bantu tentukan langkah terbaik.</p>
+    <button class="btn-white" onclick="goTo('contact')" data-id="Hubungi Kami" data-en="Contact Us">Hubungi Kami</button>
+  </div>
+  <footer>
+    <p class="footer-wordmark">Pintu Sehat</p><p class="footer-tagline">ONE DOOR. EVERY CARE.</p>
+    <div class="footer-links">
+      <button class="footer-link" onclick="goTo('home')" data-id="Beranda" data-en="Home">Beranda</button>
+      <button class="footer-link" onclick="goTo('partners')" data-id="Untuk Mitra" data-en="For Partners">Untuk Mitra</button>
+      <button class="footer-link" onclick="goTo('about')" data-id="Tentang Kami" data-en="About">Tentang Kami</button>
+      <button class="footer-link" onclick="goTo('contact')" data-id="Kontak" data-en="Contact">Kontak</button>
+    </div>
+    <p class="footer-copy">© 2026 Pintu Sehat · Your Personal Medical Concierge</p>
+  </footer>
+</div>
+
+<!-- ===== PARTNERS ===== -->
+<div class="page" id="page-partners">
+  <div class="page-hero">
+    <p class="page-hero-eyebrow" data-id="Untuk Mitra" data-en="For Partners">Untuk Mitra</p>
+    <h1 class="page-hero-h" data-id="Bersama membangun jembatan kesehatan lintas batas" data-en="Together building a cross-border healthcare bridge">Bersama membangun jembatan kesehatan lintas batas</h1>
+    <p class="page-hero-sub" data-id="Pintu Sehat menghubungkan pasien Indonesia dengan fasilitas kesehatan kelas dunia. Kami terbuka untuk bermitra dengan rumah sakit, klinik, dan fasilitas medis internasional." data-en="Pintu Sehat connects Indonesian patients with world-class healthcare facilities. We are open to partnering with international hospitals, clinics, and medical facilities.">Pintu Sehat menghubungkan pasien Indonesia dengan fasilitas kesehatan kelas dunia. Kami terbuka untuk bermitra dengan rumah sakit, klinik, dan fasilitas medis internasional.</p>
+  </div>
+  <div class="section">
+    <p class="section-eyebrow" data-id="Mengapa bermitra dengan kami" data-en="Why partner with us">Mengapa bermitra dengan kami</p>
+    <h2 class="section-h2" data-id="Akses ke pasar Indonesia yang terus berkembang" data-en="Access to Indonesia's growing outbound healthcare market">Akses ke pasar Indonesia yang terus berkembang</h2>
+    <p class="section-sub" data-id="Indonesia adalah pasar dengan lebih dari 270 juta penduduk dan permintaan yang terus tumbuh untuk layanan kesehatan internasional — terutama untuk pengobatan kanker dan kondisi kompleks." data-en="Indonesia is a market of over 270 million people with growing demand for international healthcare — particularly for cancer treatment and complex conditions.">Indonesia adalah pasar dengan lebih dari 270 juta penduduk dan permintaan yang terus tumbuh untuk layanan kesehatan internasional — terutama untuk pengobatan kanker dan kondisi kompleks.</p>
+    <div class="card-grid-2">
+      <div class="card"><p class="card-h" data-id="Jaringan referral pasien Indonesia" data-en="Indonesian patient referral network">Jaringan referral pasien Indonesia</p><p class="card-p" data-id="Akses ke pasien Indonesia yang secara aktif mencari pengobatan di luar negeri, dibangun melalui kepercayaan jaringan referral lokal." data-en="Access to Indonesian patients actively seeking overseas treatment, built through trusted local referral networks.">Akses ke pasien Indonesia yang secara aktif mencari pengobatan di luar negeri, dibangun melalui kepercayaan jaringan referral lokal.</p></div>
+      <div class="card"><p class="card-h" data-id="Pasien yang dipersiapkan dengan baik" data-en="Well-prepared patients">Pasien yang dipersiapkan dengan baik</p><p class="card-p" data-id="Kami mempersiapkan pasien sebelum tiba — rekam medis lengkap, ekspektasi realistis, dan komunikasi yang lancar." data-en="We prepare patients before arrival — complete medical records, realistic expectations, and smooth communication.">Kami mempersiapkan pasien sebelum tiba — rekam medis lengkap, ekspektasi realistis, dan komunikasi yang lancar.</p></div>
+      <div class="card"><p class="card-h" data-id="Koordinasi yang mulus" data-en="Seamless coordination">Koordinasi yang mulus</p><p class="card-p" data-id="Kami bertindak sebagai penghubung antara pasien dan tim medis — mengurangi beban administrasi dan komunikasi lintas bahasa." data-en="We act as the bridge between patients and the medical team — reducing administrative burden and cross-language communication.">Kami bertindak sebagai penghubung antara pasien dan tim medis — mengurangi beban administrasi dan komunikasi lintas bahasa.</p></div>
+      <div class="card"><p class="card-h" data-id="Kemitraan jangka panjang" data-en="Long-term partnership">Kemitraan jangka panjang</p><p class="card-p" data-id="Kami membangun hubungan kemitraan yang berkelanjutan dan saling menguntungkan — bukan sekadar transaksi satu kali." data-en="We build sustainable and mutually beneficial partnerships — not just one-time transactions.">Kami membangun hubungan kemitraan yang berkelanjutan dan saling menguntungkan — bukan sekadar transaksi satu kali.</p></div>
+    </div>
+  </div>
+  <div class="teal-band">
+    <h2 class="teal-band-h" data-id="Mari mulai percakapan" data-en="Let's start a conversation">Mari mulai percakapan</h2>
+    <p class="teal-band-p" data-id="Kami terbuka untuk eksplorasi kolaborasi dalam berbagai bentuk. Hubungi kami untuk diskusi lebih lanjut." data-en="We are open to exploring collaboration in various forms. Reach out to start the conversation.">Kami terbuka untuk eksplorasi kolaborasi dalam berbagai bentuk. Hubungi kami untuk diskusi lebih lanjut.</p>
+    <button class="btn-white" onclick="goTo('contact')" data-id="Hubungi Kami" data-en="Contact Us">Hubungi Kami</button>
+  </div>
+  <footer>
+    <p class="footer-wordmark">Pintu Sehat</p><p class="footer-tagline">ONE DOOR. EVERY CARE.</p>
+    <div class="footer-links">
+      <button class="footer-link" onclick="goTo('home')" data-id="Beranda" data-en="Home">Beranda</button>
+      <button class="footer-link" onclick="goTo('services')" data-id="Layanan" data-en="Services">Layanan</button>
+      <button class="footer-link" onclick="goTo('about')" data-id="Tentang Kami" data-en="About">Tentang Kami</button>
+      <button class="footer-link" onclick="goTo('contact')" data-id="Kontak" data-en="Contact">Kontak</button>
+    </div>
+    <p class="footer-copy">© 2026 Pintu Sehat · Your Personal Medical Concierge</p>
+  </footer>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<div class="page" id="page-about">
+  <div class="about-split">
+    <div>
+      <div class="about-photo">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#8FA8A5" stroke-width="1.5" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span data-id="Foto segera hadir" data-en="Photo coming soon">Foto segera hadir</span>
+      </div>
+    </div>
+    <div>
+      <p class="section-eyebrow" data-id="Tentang pendiri" data-en="About the founder">Tentang pendiri</p>
+      <h2 class="section-h2" data-id="Saya Theres, pendiri Pintu Sehat" data-en="I'm Theres, founder of Pintu Sehat">Saya Theres, pendiri Pintu Sehat</h2>
+      <p style="font-size:16px;color:var(--text-mid);line-height:1.75;margin-bottom:16px;" data-id="Pintu Sehat lahir dari keyakinan sederhana: setiap orang berhak mendapatkan akses ke perawatan terbaik — tanpa harus bingung, sendirian, atau kewalahan menghadapi sistem kesehatan yang kompleks di luar negeri." data-en="Pintu Sehat was born from a simple belief: everyone deserves access to the best care — without being confused, alone, or overwhelmed by complex healthcare systems abroad.">Pintu Sehat lahir dari keyakinan sederhana: setiap orang berhak mendapatkan akses ke perawatan terbaik — tanpa harus bingung, sendirian, atau kewalahan menghadapi sistem kesehatan yang kompleks di luar negeri.</p>
+      <p style="font-size:16px;color:var(--text-mid);line-height:1.75;" data-id="Saya membangun Pintu Sehat untuk menjadi teman perjalanan yang benar-benar bisa dipercaya — yang hadir bukan hanya untuk mengurus logistik, tapi benar-benar ada untuk pasien dan keluarganya di setiap langkah." data-en="I built Pintu Sehat to be a truly trusted companion — present not just to handle logistics, but to genuinely be there for patients and their families at every step.">Saya membangun Pintu Sehat untuk menjadi teman perjalanan yang benar-benar bisa dipercaya — yang hadir bukan hanya untuk mengurus logistik, tapi benar-benar ada untuk pasien dan keluarganya di setiap langkah.</p>
+    </div>
+  </div>
+  <div class="bg-warm">
+    <div class="section">
+      <p class="section-eyebrow" data-id="Visi kami" data-en="Our vision">Visi kami</p>
+      <h2 class="section-h2" data-id="Menjadi platform navigasi kesehatan paling terpercaya di Indonesia" data-en="To become Indonesia's most trusted healthcare navigation platform">Menjadi platform navigasi kesehatan paling terpercaya di Indonesia</h2>
+      <p class="section-sub" data-id="Kami percaya bahwa kesehatan adalah hak, bukan keberuntungan. Pintu Sehat hadir untuk memastikan setiap pasien Indonesia bisa mengakses perawatan terbaik yang mereka butuhkan — di mana pun itu berada." data-en="We believe healthcare is a right, not a privilege. Pintu Sehat exists to ensure every Indonesian patient can access the best care they need — wherever that may be.">Kami percaya bahwa kesehatan adalah hak, bukan keberuntungan. Pintu Sehat hadir untuk memastikan setiap pasien Indonesia bisa mengakses perawatan terbaik yang mereka butuhkan — di mana pun itu berada.</p>
+    </div>
+  </div>
+  <footer>
+    <p class="footer-wordmark">Pintu Sehat</p><p class="footer-tagline">ONE DOOR. EVERY CARE.</p>
+    <div class="footer-links">
+      <button class="footer-link" onclick="goTo('home')" data-id="Beranda" data-en="Home">Beranda</button>
+      <button class="footer-link" onclick="goTo('services')" data-id="Layanan" data-en="Services">Layanan</button>
+      <button class="footer-link" onclick="goTo('partners')" data-id="Untuk Mitra" data-en="For Partners">Untuk Mitra</button>
+      <button class="footer-link" onclick="goTo('contact')" data-id="Kontak" data-en="Contact">Kontak</button>
+    </div>
+    <p class="footer-copy">© 2026 Pintu Sehat · Your Personal Medical Concierge</p>
+  </footer>
+</div>
+
+<!-- ===== CONTACT ===== -->
+<div class="page" id="page-contact">
+  <div class="page-hero">
+    <p class="page-hero-eyebrow" data-id="Kontak" data-en="Contact">Kontak</p>
+    <h1 class="page-hero-h" data-id="Ceritakan kebutuhanmu kepada kami" data-en="Tell us what you need">Ceritakan kebutuhanmu kepada kami</h1>
+    <p class="page-hero-sub" data-id="Konsultasi pertama gratis. Kami merespons dalam 1×24 jam." data-en="First consultation is free. We respond within 24 hours.">Konsultasi pertama gratis. Kami merespons dalam 1×24 jam.</p>
+  </div>
+  <div class="section">
+    <div class="contact-items">
+      <div class="contact-item"><p class="contact-label" data-id="Email" data-en="Email">Email</p><p class="contact-value">partnership@pintusehat.com</p><p class="contact-note" data-id="Untuk mitra rumah sakit & klinik" data-en="For hospital & clinic partners">Untuk mitra rumah sakit & klinik</p></div>
+      <div class="contact-item"><p class="contact-label">WhatsApp</p><p class="contact-value" data-id="Segera hadir" data-en="Coming soon">Segera hadir</p><p class="contact-note" data-id="Untuk pasien & keluarga" data-en="For patients & families">Untuk pasien & keluarga</p></div>
+      <div class="contact-item"><p class="contact-label">LinkedIn</p><p class="contact-value">Pintu Sehat</p><p class="contact-note">linkedin.com/company/pintu-sehat</p></div>
+      <div class="contact-item"><p class="contact-label" data-id="Status" data-en="Status">Status</p><p class="contact-value" data-id="Pre-launch" data-en="Pre-launch">Pre-launch</p><p class="contact-note" data-id="Target operasional Q4 2026" data-en="Operational target Q4 2026">Target operasional Q4 2026</p></div>
+    </div>
+  </div>
+  <footer>
+    <p class="footer-wordmark">Pintu Sehat</p><p class="footer-tagline">ONE DOOR. EVERY CARE.</p>
+    <div class="footer-links">
+      <button class="footer-link" onclick="goTo('home')" data-id="Beranda" data-en="Home">Beranda</button>
+      <button class="footer-link" onclick="goTo('services')" data-id="Layanan" data-en="Services">Layanan</button>
+      <button class="footer-link" onclick="goTo('partners')" data-id="Untuk Mitra" data-en="For Partners">Untuk Mitra</button>
+      <button class="footer-link" onclick="goTo('about')" data-id="Tentang Kami" data-en="About">Tentang Kami</button>
+    </div>
+    <p class="footer-copy">© 2026 Pintu Sehat · Your Personal Medical Concierge</p>
+  </footer>
+</div>
+
+<script>
+function goTo(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('visible'));
+  document.getElementById('page-'+id).classList.add('visible');
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.querySelectorAll('.nav-link[data-page]').forEach(l=>l.classList.toggle('active',l.dataset.page===id));
+  if(document.getElementById('mob-drawer').classList.contains('open'))toggleMenu();
+}
+function setLang(l){
+  ['lid','len'].forEach(id=>document.getElementById(id).classList.toggle('active',id==='l'+l));
+  ['mlid','mlen'].forEach(id=>document.getElementById(id).classList.toggle('active',id==='ml'+l));
+  document.querySelectorAll('[data-id]').forEach(el=>{const v=l==='id'?el.dataset.id:el.dataset.en;if(v)el.textContent=v;});
+  document.documentElement.lang=l;
+}
+let menuOpen=false;
+function toggleMenu(){menuOpen=!menuOpen;document.getElementById('mob-drawer').classList.toggle('open',menuOpen);}
+</script>
+</body>
+</html>
